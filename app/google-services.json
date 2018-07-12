@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "813081601273",
+    "firebase_url": "https://summer-c10c9.firebaseio.com",
+    "project_id": "summer-c10c9",
+    "storage_bucket": "summer-c10c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813081601273:android:bc9738929c5a49c1",
+        "android_client_info": {
+          "package_name": "com.example.nusra.summer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "813081601273-lvc28pqgmd9dfvvoof3rtgs90u589740.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.nusra.summer",
+            "certificate_hash": "4bbc301bbbcebdef8a96a95e49f1d7bc34313322"
+          }
+        },
+        {
+          "client_id": "813081601273-f3o0aih68rq0vdrdgec0s80j3ugqhfbm.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "813081601273-f3o0aih68rq0vdrdgec0s80j3ugqhfbm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDafV470M-0BfV5AsD9H55_G2l1WuyPWfM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "813081601273-f3o0aih68rq0vdrdgec0s80j3ugqhfbm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
