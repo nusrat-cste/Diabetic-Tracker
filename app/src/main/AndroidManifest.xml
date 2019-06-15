@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.nusra.summer">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,17 +19,17 @@
         <activity
             android:name=".PatientDataInputActivity"
             android:label="@string/title_activity_patient_data_input"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".UserTypeActivity">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".AdminPageActivity"
             android:label="@string/title_activity_admin_page"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ViewPatientsActivity" />
         <activity android:name=".ViewDoctorsActivity" />
         <activity android:name=".ViewObserversActivity" />
@@ -34,7 +37,6 @@
             android:name=".DoctorPageActivity"
             android:label="@string/title_activity_doctor_page"
             android:theme="@style/AppTheme.NoActionBar">
-
         </activity>
         <activity
             android:name=".ObserverPageActivity"
@@ -67,7 +69,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nusra.summer.PatientDataInputActivity" />
         </activity>
-        <activity android:name=".APatientRecordActivity"></activity>
+        <activity android:name=".APatientRecordActivity" />
+        <activity
+            android:name=".Models.AddAPatientMedicalRecord"
+            android:label="@string/title_activity_add_apatient_medical_record"
+            android:parentActivityName=".APatientRecordActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.nusra.summer.APatientRecordActivity" />
+        </activity>
+        <activity android:name=".AddPatientInfoForm"></activity>
     </application>
 
 </manifest>

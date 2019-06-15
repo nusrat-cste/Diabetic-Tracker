@@ -118,4 +118,5 @@
     <string name="button_meal">Meal Tracker</string>
     <string name="title_activity_patient_meal">PatientMealActivity</string>
     <string name="EnterCaloriesTaken">Enter Calories Taken</string>
+    <string name="title_activity_add_apatient_medical_record">AddAPatientMedicalRecord</string>
 </resources>

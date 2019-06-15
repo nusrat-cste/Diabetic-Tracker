@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,11 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nusra.summer.Models.PatientBGRecord;
 import com.example.nusra.summer.Models.User;
@@ -31,10 +36,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class PatientBGActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference mDatabase;
@@ -45,7 +52,12 @@ public class PatientBGActivity extends AppCompatActivity
     EditText CurrentDate,CurrentTime,GlucoseReading;
     RadioGroup inputMealBefore;
     RadioButton inputMealBtn;
-    int selectedMeal;
+    String selectedMeal;
+    List<String> Meals = new ArrayList<String>();
+    List<String> Time = new ArrayList<String>();
+    private String selectedTime;
+    private String MealBefore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,40 +98,64 @@ public class PatientBGActivity extends AppCompatActivity
         CurrentDate.setText(date);
         final String currentDate = CurrentDate.getText().toString();
         final String currentTime = CurrentTime.getText().toString();
+        Meals.add("Breakfast");
+        Meals.add("Lunch");
+        Meals.add("Dinner");
+        Time.add("Before");
+        Time.add("After");
+
+        final Spinner _spinner1 = (Spinner) findViewById(R.id.spinner_Meal);
+        final Spinner _spinner2 = (Spinner) findViewById(R.id.spinner_time);
+
+        _spinner1.setOnItemSelectedListener(this);
+        _spinner2.setOnItemSelectedListener(this);
+
+        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Meals);
+        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Time);
+        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        _spinner1.setAdapter(dataAdapter1);
+        _spinner2.setAdapter(dataAdapter2);
 
         BGsubmit = (Button) findViewById(R.id.btn_submit_bg);
 
 
         getSetUserProfile();
-
+        
         BGsubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                inputMealBefore = (RadioGroup)findViewById(R.id.radioMealBefore);
-                selectedMeal = inputMealBefore.getCheckedRadioButtonId();
-                inputMealBtn = (RadioButton) findViewById(selectedMeal);
-                String MealBefore = inputMealBtn.getText().toString();
+                
                 String glucose_reading = GlucoseReading.getText().toString();
 
                 RadioGroup inputBgMetric = (RadioGroup)findViewById(R.id.radio_bg_metric);
-                int selectedMeal = inputBgMetric.getCheckedRadioButtonId();
-                RadioButton inputbgMetricBtn = (RadioButton) findViewById(selectedMeal);
+                int selectedM = inputBgMetric.getCheckedRadioButtonId();
+                RadioButton inputbgMetricBtn = (RadioButton) findViewById(selectedM);
                 String BGMetric = inputbgMetricBtn.getText().toString();
 
 
                 mDatabase2 = FirebaseDatabase.getInstance().getReference();
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                User current_user = new User(user.getUid(),new PatientBGRecord(glucose_reading,currentTime,MealBefore,currentDate,currentTime));
                 DatabaseReference q = mDatabase2.child("patients").child("PatientData").child(user.getUid()).child("GlucoseRecord").push();
                 q.child("RecordOfDate").setValue(currentDate);
                 q.child("RecordOfTime").setValue(currentTime);
-                q.child("RecordOfMealBefore").setValue(MealBefore);
+
+                if(selectedTime.equals("Before")){
+                    Log.e("Meal",selectedMeal+selectedTime);
+                q.child("RecordOfMealBefore").setValue(selectedMeal);
+                q.child("RecordOfMealAfter").setValue("N/A");
+                }
+                else if(selectedTime.equals("After")){
+                q.child("RecordOfMealAfter").setValue(selectedMeal);
+                q.child("RecordOfMealBefore").setValue("N/A");
+                }
                 q.child("GlucoseLevel").setValue(glucose_reading);
                 q.child("GlucoseLevelMetric").setValue(BGMetric);
 
                 finish();
+                Toast.makeText(getApplicationContext(),"Records added succesfully",Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), PatientDataInputActivity.class));
             }
         });
@@ -196,5 +232,23 @@ public class PatientBGActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        int _id = parent.getId();
+        if(_id == R.id.spinner_Meal){
+            selectedMeal = parent.getItemAtPosition(position).toString();
+            Log.e("Arraylist",selectedMeal);
+        }
+        else if(_id == R.id.spinner_time){
+            selectedTime = parent.getItemAtPosition(position).toString();
+            Log.e("Arraylist",selectedTime);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

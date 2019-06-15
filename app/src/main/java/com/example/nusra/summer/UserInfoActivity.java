@@ -25,6 +25,8 @@ public class UserInfoActivity extends AppCompatActivity {
     public String loginMessage = "";
     private RadioGroup inputSex;
     private String userType;
+    private String leftDevice;
+    private String rightDevice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +67,13 @@ public class UserInfoActivity extends AppCompatActivity {
                 mDatabase.child("users").child(fuser.getUid()).child("DateOfBirth").setValue(dateOfBirth);
                 mDatabase.child("users").child(fuser.getUid()).child("Sex").setValue(Sex);
                 mDatabase.child("users").child(fuser.getUid()).child("UserType").setValue(userType);
+                mDatabase.child("users").child(fuser.getUid()).child("Device").child("Leftsole").setValue(Sex);
+                mDatabase.child("users").child(fuser.getUid()).child("Device").child("Rightsole").setValue(userType);
                 if(userType.equals("Patient"))
                     mDatabase.child("users").child(fuser.getUid()).child("AssignedDoctor").setValue("");
-
-
                 finish();
                 if(userType.equals("Patient"))
+
                     startActivity(new Intent(getApplicationContext(), PatientDataInputActivity.class));
                 else if(userType.equals("Admin"))
                     startActivity(new Intent(getApplicationContext(), AdminPageActivity.class));

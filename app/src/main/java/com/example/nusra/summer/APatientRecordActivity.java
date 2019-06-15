@@ -100,7 +100,7 @@ public class APatientRecordActivity extends AppCompatActivity {
             //Log.e("Arraylist","BG"+snapshot.getValue().toString());
                 if(recordtype.equals("GlucoseRecord")) {
                     PatientBGRecord UserRecord = snapshot.getValue(PatientBGRecord.class);
-                    Log.e("Arraylist", "Bg =" + UserRecord.GlucoseLevel + " " + UserRecord.GlucoseLevelMetric + " date and time = " + UserRecord.RecordOfTime + " " + UserRecord.RecordOfDate + " record Taken Before = " + UserRecord.RecordOfMealBefore);
+                    Log.e("Arraylist", "Bg =" + UserRecord.GlucoseLevel + " " + UserRecord.GlucoseLevelMetric + " date and time = " + UserRecord.RecordOfTime + " " + UserRecord.RecordOfDate + " record Taken Before = " + UserRecord.RecordOfMealBefore + " record Taken Before = "+ UserRecord.RecordOfMealAfter);
                     BG.add(UserRecord);
                 }
                 else if(recordtype.equals("ExerciseRecord")) {

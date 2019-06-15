@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,17 +31,32 @@ public class MainActivity extends AppCompatActivity {
     private Button  btnSignUp,btnSignIn;
     private ProgressBar progressBar;
     DatabaseReference mDatabase;
+    DatabaseReference mDatabase2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Intent intent = this.getIntent();
         userType = intent.getExtras().getString("userType");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+//            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            if(userType.equals("Admin"))
+                startActivity(new Intent(getApplicationContext(), AdminPageActivity.class));
+            else if(userType.equals("Patient"))
+                startActivity(new Intent(getApplicationContext(), PatientDataInputActivity.class));
+            else if(userType.equals("Doctor"))
+                startActivity(new Intent(getApplicationContext(), DoctorPageActivity.class));
+            else if(userType.equals("Observer"))
+                startActivity(new Intent(getApplicationContext(), ObserverPageActivity.class));
+        } else {
+            // User is signed out
+            Log.d(TAG, "onAuthStateChanged:signed_out");
+        }
 
         Log.d("UserType",userType);
         inputEmail =  (EditText)findViewById(R.id.field_email);
@@ -71,14 +87,12 @@ public class MainActivity extends AppCompatActivity {
     private void LoginUser() {
         final String Email = inputEmail.getText().toString().trim();
         final String Password = inputPassword.getText().toString().trim();
-
         try {
             mAuth.signInWithEmailAndPassword(Email, Password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-
                                 progressBar.setVisibility(View.INVISIBLE);
                                 // Sign in success, update UI with the signed-in user's information
                                 Toast.makeText(MainActivity.this, "Signed In", Toast.LENGTH_SHORT).show();
@@ -91,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
                                     startActivity(new Intent(getApplicationContext(), DoctorPageActivity.class));
                                 else if(userType.equals("Observer"))
                                     startActivity(new Intent(getApplicationContext(), ObserverPageActivity.class));
-
                             } else{
                                 progressBar.setVisibility(View.INVISIBLE);
                                 // If sign in fails, display a message to the user.
@@ -136,10 +149,8 @@ public class MainActivity extends AppCompatActivity {
                                 mDatabase.child("users").child(fuser.getUid()).child("Email").setValue(Email);
 
                                 finish();
-
                                 Intent i = new Intent (getApplicationContext(), UserInfoActivity.class);
                                 i = i.putExtra("userType", userType);
-
                                 startActivity(i);
                             }
                             else{
